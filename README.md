@@ -5,12 +5,8 @@ Take full control of your static website/blog generation by writing your
 own simple, lightweight, and magic-free static site generator in
 Python. That's right! Reinvent the wheel!
 
-[![View Source][SOURCE-BADGE]](makesite.py)
-[![View Demo][DEMO-BADGE]](https://tmug.github.io/makesite-demo)
 [![MIT License][LICENSE-BADGE]](LICENSE.md)
 
-[SOURCE-BADGE]: https://img.shields.io/badge/view-source-brightgreen.svg
-[DEMO-BADGE]: https://img.shields.io/badge/view-demo-brightgreen.svg
 [LICENSE-BADGE]: https://img.shields.io/badge/license-MIT-blue.svg
 
 
@@ -31,6 +27,13 @@ Contents
 
 Introduction
 ------------
+
+This repository started with the [makesite.py][makesite] source. I took
+[Sunaina Pai][sunaina-pai] up on the invitation to reinvent the wheel using
+that project as the base. It's quickly becoming thoroughly unrecognizable.
+
+[makesite]: https://github.com/sunainapai/makesite
+[sunaina-pai]: https://github.com/sunainapai
 
 This repository contains the source code of an example website
 containing two static blogs and a few static pages. The website can be
@@ -87,40 +90,17 @@ Get Started
 This section provides some quick steps to get you off the ground as
 quickly as possible.
 
- 1. For a quick demo on your local system, just enter this command:
+ 1. Install the dependencies
 
-        make serve
+        python -m pip install --upgrade -r requirements.txt
 
-    If you don't have `make` but have Python 3.x, enter this command:
+ 2. For a quick demo on your local system, just enter this command:
 
-        python3 makesite.py
-        cd _site
-        python3 -m http.server
+        fab serve
 
-    Note: In some environments, you may need to use `python` instead of
-    `python3` to invoke Python 3.x.
+    Then visit http://localhost:8000/.
 
-    If you only have Python 2.7, enter this command:
-
-        python makesite.py
-        cd _site
-        python -m SimpleHTTPServer
-
-    Then visit http://localhost:8000/. It should look like
-    [this](https://tmug.github.io/makesite-demo).
-
-    Note: You can run [makesite.py](makesite.py) with Python 2.7 or
-    Python 3.x.
-
- 2. You may see a few `Cannot render Markdown` warning messages in the
-    output of the previous command. This is due to the fact that an
-    example [blog](content/blog) in this project has a few posts written
-    in Markdown. To render them correctly, install the `commonmark`
-    package with this command:
-
-        pip install commonmark
-
-    Then try the previous step again.
+    Note: My version of [makesite.py](makesite.py) assumes Python 3.9.x
 
  3. For an Internet-facing website, you would be hosting the static
     website/blog on a hosting service and/or with a web server such as
@@ -128,26 +108,27 @@ quickly as possible.
     the static files and know where the static files are and move them
     to your hosting location.
 
-    If you have the `make` command, enter this command to generate your
-    website:
+    Enter this command to generate your website:
 
-        make site
-
-    If you don't have `make` but have `python3`, enter this command:
-
-        python3 makesite.py
-
-    Note: In some environments, you may need to use `python` instead of
-    `python3` to invoke Python 3.x.
-
-    If you only have `python`, enter this command:
-
-        python makesite.py
+        fab site
 
     The `_site` directory contains the entire generated website. The
     content of this directory may be copied to your website hosting
     location.
 
+
+Noteworthy Deviations
+---------------------
+
+`makesite.py` is a very straightforward, practical static site generator.
+My version is — not. But I try to keep it organized. Here are some of the
+changes I made.
+
+- Run tasks with [Fabric][fabric] instead of Make
+- Run tests with [Pytest][pytest] instead of unittest.
+
+[fabric]: https://fabfile.org
+[pytest]: htts://pytest.org
 
 The Code
 --------

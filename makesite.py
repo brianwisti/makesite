@@ -27,13 +27,23 @@
 """Make static website/blog with Python."""
 
 
+import logging
 import os
 import shutil
 import re
 import glob
-import sys
 import json
 import datetime
+
+from rich.logging import RichHandler
+
+
+FORMAT = "%(message)s"
+logging.basicConfig(
+    level="DEBUG", format=FORMAT, datefmt="[%X]", handlers=[RichHandler()]
+)
+
+logger = logging.getLogger(__file__)
 
 
 def fread(filename):
@@ -50,11 +60,6 @@ def fwrite(filename, text):
 
     with open(filename, "w") as f:
         f.write(text)
-
-
-def log(msg, *args):
-    """Log message with specified arguments."""
-    sys.stderr.write(msg.format(*args) + "\n")
 
 
 def truncate(text, words=25):
@@ -106,7 +111,7 @@ def read_content(filename):
 
             text = commonmark.commonmark(text)
         except ImportError as e:
-            log("WARNING: Cannot render Markdown in {}: {}", filename, str(e))
+            logger.warning("Cannot render Markdown in %s: %s", filename, e)
 
     # Update the dictionary with content and RFC 2822 date.
     content.update({"content": text, "rfc_2822_date": rfc_2822_format(content["date"])})
@@ -143,7 +148,7 @@ def make_pages(src, dst, layout, **params):
         dst_path = render(dst, **page_params)
         output = render(layout, **page_params)
 
-        log("Rendering {} => {} ...", src_path, dst_path)
+        logger.info("Rendering %s => %s ...", src_path, dst_path)
         fwrite(dst_path, output)
 
     return sorted(items, key=lambda x: x["date"], reverse=True)
@@ -162,7 +167,7 @@ def make_list(posts, dst, list_layout, item_layout, **params):
     dst_path = render(dst, **params)
     output = render(list_layout, **params)
 
-    log("Rendering list => {} ...", dst_path)
+    logger.info("Rendering list => %s ...", dst_path)
     fwrite(dst_path, output)
 
 
@@ -170,6 +175,7 @@ def main():
     # Create a new _site directory from scratch.
     if os.path.isdir("_site"):
         shutil.rmtree("_site")
+
     shutil.copytree("static", "_site")
 
     # Default parameters.

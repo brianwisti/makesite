@@ -1,4 +1,8 @@
 commonmark
 coverage
+fabric
 pip-tools
+pylint
 pytest
+pytest-cov
+rich

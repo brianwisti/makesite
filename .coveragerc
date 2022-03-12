@@ -1,3 +1,13 @@
+[run]
+# If True, check for untested branches
+branch = True
+
 [report]
+# If True, show line numbers of untested blocks
+show_missing = True
+
+# If True, do not report files with 100% coverage
+skip_covered = False
+
 exclude_lines =
     if __name__ == '__main__':
