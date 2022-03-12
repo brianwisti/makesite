@@ -15,23 +15,18 @@ serve: site
 	    echo Cannot find Python http.server or SimpleHTTPServer; \
 	fi
 
-venv2:
-	virtualenv ~/.venv/makesite
-	echo . ~/.venv/makesite/bin/activate > venv
-	. ./venv && pip install commonmark coverage
-
-venv: FORCE
-	python3 -m venv ~/.venv/makesite
-	echo . ~/.venv/makesite/bin/activate > venv
-	. ./venv && pip install commonmark coverage
+setup:
+	pip-compile requirements.in > requirements.txt
+	pip-sync requirements.txt
+	pyenv rehash
 
 test: FORCE
-	. ./venv && python -m unittest -bv
+	python -m unittest -bv
 
 coverage:
-	. ./venv && coverage run --branch --source=. -m unittest discover -bv; :
-	. ./venv && coverage report -m
-	. ./venv && coverage html
+	coverage run --branch --source=. -m unittest discover -bv; :
+	coverage report -m
+	coverage html
 
 clean:
 	find . -name "__pycache__" -exec rm -r {} +
@@ -49,7 +44,7 @@ example:
 	     '"https://tmug.github.io/makesite-demo" }' > params.json
 	#
 	# Generate the website.
-	. ./venv && ./makesite.py
+	./makesite.py
 	rm params.json
 	#
 	# Get current commit ID.

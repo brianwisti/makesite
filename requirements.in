@@ -1,0 +1,4 @@
+commonmark
+coverage
+pip-tools
+pytest
